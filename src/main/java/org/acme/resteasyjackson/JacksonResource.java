@@ -1,7 +1,13 @@
 package org.acme.resteasyjackson;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+
+import org.jboss.logging.Logger;
+
+import io.quarkus.arc.log.LoggerName;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Set;
@@ -13,6 +19,12 @@ public class JacksonResource {
 
     private final Set<Quark> quarks = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
 
+	@Inject
+	Logger log;
+
+	@LoggerName("foo")
+	Logger fooLog;
+
     public JacksonResource() {
         quarks.add(new Quark("Up", "The up quark or u quark (symbol: u) is the lightest of all quarks, a type of elementary particle, and a major constituent of matter."));
         quarks.add(new Quark("Strange", "The strange quark or s quark (from its symbol, s) is the third lightest of all quarks, a type of elementary particle."));
@@ -21,8 +33,10 @@ public class JacksonResource {
     }
 
     @GET
-    public Set<Quark> list() {
-        return quarks;
+	public Set<Quark> list() {
+		log.info("JacksonResource!");
+		fooLog.info("Goes to _foo_ logger!");
+		return quarks;
     }
 
     @POST
